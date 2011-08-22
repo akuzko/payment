@@ -1,13 +1,34 @@
 Payment
 =======
 
-Introduction goes here.
+Small Rails plugin for convenient work with money-like column types.
+
+For a columns named like 'pay_*' or '*_pay', ads corresponding methods
+'payment_*' or '*_payment', which work with object of Payment::Money class.
+This class behaves much as native Float, but also handles rounding issues. 
 
 
 Example
 =======
 
-Example goes here.
+class Pay < ActiveRecord::Base
+  # has fields pay_amount:decimal(10,2), total_pay:decimal(10,2)
+end
 
+Pay.create :pay_amount => 12.3456, :total_pay => 34.5678
+pay = Pay.last
+pay.pay_amount.class # => BigDecimal
+pay.pay_amount.to_f # => 12.35 - rounding performed by DB
+pay.payment_amount.class # => Payment::Money
+pay.payment_amount = 12.345
+pay.pay_amount.to_f # => 12.34 - rounding performed by money proxy (half-even banking rounding)
 
-Copyright (c) 2011 [name of plugin creator], released under the MIT license
+pay.total_payment # => 34.57
+pay.total_payment do |float|
+  # some calculations on float value
+  float * 33.567
+end
+pay.total_payment # => 1160.41119
+pay.total_pay.to_f # => 1160.41
+
+Copyright (c) 2011 Artem Kuzko, released under the MIT license
