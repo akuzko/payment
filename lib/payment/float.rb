@@ -5,6 +5,6 @@ module Payment::Float
   
   def =~ other
     return super unless other.class == Float
-    self - other < Payment::Precision
+    self - other < Payment::EPSILON
   end
 end
