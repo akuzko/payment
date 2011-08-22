@@ -8,12 +8,12 @@ class Payment::Money < DelegateClass Float
   
   %w(% * ** + - /).each do |operator|
     define_method operator do |other|
-      Money.new(super(other).round(Payment::PRECISION))
+      Payment::Money.new(super(other).round(Payment::PRECISION))
     end
   end
   
   def -@
-    Money.new super
+    Payment::Money.new super
   end
   
   def ~@

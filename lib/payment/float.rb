@@ -1,6 +1,6 @@
 module Payment::Float
   def ~@
-    Money.new self
+    Payment::Money.new self
   end
   
   def =~ other
